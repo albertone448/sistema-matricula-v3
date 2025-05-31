@@ -82,8 +82,11 @@ namespace BackEnd.Controllers
                     return BadRequest("La identificación es requerida");
                 if (string.IsNullOrWhiteSpace(crearUsuarioDTO.Rol))
                     return BadRequest("El rol es requerido");
-                if (string.IsNullOrWhiteSpace(crearUsuarioDTO.Carrera))
-                    return BadRequest("La carrera es requerida");
+
+                // CAMBIO: Solo validar carrera si NO es administrador
+                if (crearUsuarioDTO.Rol != "Administrador" && string.IsNullOrWhiteSpace(crearUsuarioDTO.Carrera))
+                    return BadRequest("La carrera es requerida para este rol");
+
                 if (string.IsNullOrWhiteSpace(crearUsuarioDTO.Correo))
                     return BadRequest("El correo es requerido");
 
@@ -94,7 +97,7 @@ namespace BackEnd.Controllers
                     Apellido2 = crearUsuarioDTO.Apellido2,
                     Identificacion = crearUsuarioDTO.Identificacion,
                     Rol = crearUsuarioDTO.Rol,
-                    Carrera = crearUsuarioDTO.Carrera,
+                    Carrera = crearUsuarioDTO.Rol == "Administrador" ? "N/A" : crearUsuarioDTO.Carrera,
                     Correo = crearUsuarioDTO.Correo,
                     Contrasena = crearUsuarioDTO.Contrasena
                 };

@@ -11,7 +11,10 @@ namespace DAL.Interfaces.InterfacesDeEntidades
     {
         List<Usuario> GetUsuariosByRolYCarrera(string rol, string carrera);
         Task<(int Estado, string Mensaje, Usuario? Usuario)> LoginUsuario(string correo, string contrasena);
-        Task<(int Estado, string Mensaje)> VerificarUsuario(int usuarioId, int numeroVerificacion);
+
+        // MÉTODO ACTUALIZADO - Ahora retorna la nueva contraseña
+        Task<(int Estado, string Mensaje, string? NuevaContrasena)> VerificarUsuario(int usuarioId, int numeroVerificacion);
+
         Task<(int Estado, string Mensaje)> CambiarContrasena(int usuarioId, string contrasenaActual, string contrasenaNueva);
         List<Usuario> GetTodosLosUsuarios();
         Usuario GetUsuarioPorId(int id);

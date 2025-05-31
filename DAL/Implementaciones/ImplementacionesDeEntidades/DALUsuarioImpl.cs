@@ -120,7 +120,8 @@ namespace DAL.Implementaciones.ImplementacionesDeEntidades
             }
         }
 
-        public async Task<(int Estado, string Mensaje)> VerificarUsuario(int usuarioId, int numeroVerificacion)
+        // MÉTODO CORREGIDO - Ahora maneja la nueva contraseña
+        public async Task<(int Estado, string Mensaje, string? NuevaContrasena)> VerificarUsuario(int usuarioId, int numeroVerificacion)
         {
             try
             {
@@ -140,14 +141,35 @@ namespace DAL.Implementaciones.ImplementacionesDeEntidades
                 {
                     var estado = reader.GetInt32("Estado");
                     var mensaje = reader.GetString("Mensaje");
-                    return (estado, mensaje);
+
+                    // Verificar si hay nueva contraseña (solo cuando el estado es 1 - éxito)
+                    string? nuevaContrasena = null;
+                    if (estado == 1)
+                    {
+                        // Verificar si existe la columna NuevaContrasena
+                        try
+                        {
+                            var ordinal = reader.GetOrdinal("NuevaContrasena");
+                            if (!reader.IsDBNull(ordinal))
+                            {
+                                nuevaContrasena = reader.GetString(ordinal);
+                            }
+                        }
+                        catch (IndexOutOfRangeException)
+                        {
+                            // La columna NuevaContrasena no existe en el resultado
+                            // Esto puede pasar si el SP no retorna la nueva contraseña
+                        }
+                    }
+
+                    return (estado, mensaje, nuevaContrasena);
                 }
 
-                return (-1, "Error al procesar la verificación");
+                return (-1, "Error al procesar la verificación", null);
             }
             catch (Exception ex)
             {
-                return (-1, $"Error en la verificación: {ex.Message}");
+                return (-1, $"Error en la verificación: {ex.Message}", null);
             }
         }
 

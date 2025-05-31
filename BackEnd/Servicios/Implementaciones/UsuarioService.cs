@@ -154,6 +154,7 @@ namespace BackEnd.Servicios.Implementaciones
             }
         }
 
+        // Método actualizado en UsuarioService.cs
         public async Task<(int Estado, string Mensaje)> VerificarUsuario(int usuarioId, int numeroVerificacion)
         {
             try
@@ -161,19 +162,33 @@ namespace BackEnd.Servicios.Implementaciones
                 // Obtener datos del usuario antes de verificar
                 var usuario = _unidadDeTrabajo.UsuarioDAL.GetUsuarioPorId(usuarioId);
 
-                var (estado, mensaje) = await _unidadDeTrabajo.UsuarioDAL.VerificarUsuario(usuarioId, numeroVerificacion);
+                // CAMBIO PRINCIPAL: Ahora recibimos también la nueva contraseña
+                var (estado, mensaje, nuevaContrasena) = await _unidadDeTrabajo.UsuarioDAL.VerificarUsuario(usuarioId, numeroVerificacion);
 
                 if (estado == 1 && usuario != null)
                 {
                     _unidadDeTrabajo.Complete();
 
-                    // Enviar correo de confirmación de verificación
+                    // Enviar correo según si se generó nueva contraseña o no
                     _ = Task.Run(async () =>
                     {
-                        await _mailHelper.SendVerificationSuccessAsync(
-                            usuario.Correo,
-                            $"{usuario.Nombre} {usuario.Apellido1}"
-                        );
+                        if (!string.IsNullOrEmpty(nuevaContrasena))
+                        {
+                            // Enviar correo con la nueva contraseña generada automáticamente
+                            await _mailHelper.SendPasswordResetAsync(
+                                usuario.Correo,
+                                $"{usuario.Nombre} {usuario.Apellido1}",
+                                nuevaContrasena
+                            );
+                        }
+                        else
+                        {
+                            // Enviar correo de confirmación simple (fallback)
+                            await _mailHelper.SendVerificationSuccessAsync(
+                                usuario.Correo,
+                                $"{usuario.Nombre} {usuario.Apellido1}"
+                            );
+                        }
                     });
                 }
 
