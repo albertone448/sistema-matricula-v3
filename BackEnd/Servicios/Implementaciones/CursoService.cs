@@ -87,6 +87,7 @@ namespace BackEnd.Servicios.Implementaciones
             {
                 CursoId = curso.CursoId,
                 Nombre = curso.Nombre,
+                Codigo = curso.Codigo,
                 Descripcion = curso.Descripcion,
                 Creditos = curso.Creditos
             };
@@ -98,6 +99,7 @@ namespace BackEnd.Servicios.Implementaciones
             {
                 CursoId = cursoDTO.CursoId,
                 Nombre = cursoDTO.Nombre,
+                Codigo = cursoDTO.Codigo,
                 Descripcion = cursoDTO.Descripcion,
                 Creditos = cursoDTO.Creditos
             };

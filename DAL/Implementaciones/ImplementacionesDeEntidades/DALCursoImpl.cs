@@ -40,10 +40,11 @@ namespace DAL.Implementaciones.ImplementacionesDeEntidades
         {
             try
             {
-                var query = "EXEC sp_CreateCurso @Nombre, @Descripcion, @Creditos";
+                var query = "EXEC sp_CreateCurso @Nombre, @Codigo, @Descripcion, @Creditos";
                 var parameters = new SqlParameter[]
                 {
                 new SqlParameter("@Nombre", System.Data.SqlDbType.NVarChar) { Value = curso.Nombre },
+                new SqlParameter("@Codigo", System.Data.SqlDbType.NVarChar) { Value = curso.Codigo },
                 new SqlParameter("@Descripcion", System.Data.SqlDbType.NVarChar) { Value = curso.Descripcion },
                 new SqlParameter("@Creditos", System.Data.SqlDbType.Int) { Value = curso.Creditos }
                 };
@@ -75,11 +76,12 @@ namespace DAL.Implementaciones.ImplementacionesDeEntidades
         {
             try
             {
-                var query = "EXEC sp_UpdateCurso @CursoId, @Nombre, @Descripcion, @Creditos";
+                var query = "EXEC sp_UpdateCurso @CursoId, @Nombre, @Codigo,  @Descripcion, @Creditos";
                 var parameters = new SqlParameter[]
                 {
                     new SqlParameter("@CursoId", System.Data.SqlDbType.Int) { Value = curso.CursoId },
                     new SqlParameter("@Nombre", System.Data.SqlDbType.NVarChar) { Value = curso.Nombre },
+                    new SqlParameter("@Codigo", System.Data.SqlDbType.NVarChar) { Value = curso.Codigo },
                     new SqlParameter("@Descripcion", System.Data.SqlDbType.NVarChar) { Value = curso.Descripcion },
                     new SqlParameter("@Creditos", System.Data.SqlDbType.Int) { Value = curso.Creditos }
                 };
