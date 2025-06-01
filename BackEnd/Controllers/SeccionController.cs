@@ -1,13 +1,12 @@
 ﻿using BackEnd.DTO;
 using BackEnd.Servicios.Interfaces;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BackEnd.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize] // Proteger todo el controlador con JWT
+
     public class SeccionController : ControllerBase
     {
         private readonly ISeccionService _seccionService;
@@ -19,7 +18,6 @@ namespace BackEnd.Controllers
 
         // GET: api/Seccion/GetAllSecciones
         [HttpGet("GetAllSecciones")]
-        [Authorize(Roles = "Administrador,Profesor")] // Solo administradores y profesores
         public IActionResult GetAllSecciones()
         {
             try
@@ -35,7 +33,6 @@ namespace BackEnd.Controllers
 
         // GET: api/Seccion/GetSeccionById/{id}
         [HttpGet("GetSeccionById/{id}")]
-        [Authorize] // Cualquier usuario autenticado
         public IActionResult GetSeccionById(int id)
         {
             try
@@ -53,7 +50,6 @@ namespace BackEnd.Controllers
 
         // POST: api/Seccion/AddSeccion
         [HttpPost("AddSeccion")]
-        [Authorize(Roles = "Administrador")] // Solo administradores pueden crear secciones
         public IActionResult AddSeccion([FromBody] SeccioneDTO seccionDTO)
         {
             try
@@ -73,7 +69,6 @@ namespace BackEnd.Controllers
 
         // PUT: api/Seccion/UpdateSeccion
         [HttpPut("UpdateSeccion")]
-        [Authorize(Roles = "Administrador,Profesor")] // Administradores y profesores pueden actualizar
         public IActionResult UpdateSeccion([FromBody] SeccioneDTO seccionDTO)
         {
             try
@@ -93,7 +88,6 @@ namespace BackEnd.Controllers
 
         // DELETE: api/Seccion/DeleteSeccion
         [HttpDelete("DeleteSeccion")]
-        [Authorize(Roles = "Administrador")] // Solo administradores pueden eliminar
         public IActionResult DeleteSeccion([FromBody] SeccioneDTO seccionDTO)
         {
             try
@@ -113,7 +107,6 @@ namespace BackEnd.Controllers
 
         // GET: api/Seccion/GetSeccionesbyCarrera/{carrera}
         [HttpGet("GetSeccionesbyCarrera/{carrera}")]
-        [Authorize] // Cualquier usuario autenticado
         public IActionResult GetSeccionesbyCarrera(string carrera)
         {
             try
@@ -122,28 +115,6 @@ namespace BackEnd.Controllers
                 if (secciones == null || !secciones.Any())
                     return NotFound($"No se encontraron secciones para la carrera {carrera}");
                 return Ok(secciones);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Error interno del servidor: {ex.Message}");
-            }
-        }
-
-        // GET: api/Seccion/MisSecciones - Endpoint para que un profesor vea sus secciones
-        [HttpGet("MisSecciones")]
-        [Authorize(Roles = "Profesor")]
-        public IActionResult GetMisSecciones()
-        {
-            try
-            {
-                // Obtener el ID del usuario desde el token JWT
-                var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
-                if (userIdClaim == null)
-                    return Unauthorized("No se pudo obtener la información del usuario");
-
-                var usuarioId = int.Parse(userIdClaim.Value);
-
-                return Ok(new { Mensaje = $"Secciones del profesor con ID: {usuarioId}" });
             }
             catch (Exception ex)
             {
