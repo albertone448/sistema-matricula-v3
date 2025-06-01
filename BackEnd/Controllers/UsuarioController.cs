@@ -1,5 +1,6 @@
 ﻿using BackEnd.DTO;
 using BackEnd.Servicios.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BackEnd.Controllers
@@ -9,14 +10,17 @@ namespace BackEnd.Controllers
     public class UsuarioController : ControllerBase
     {
         private readonly IUsuarioService _usuarioService;
+        private readonly IJwtService _jwtService;
 
-        public UsuarioController(IUsuarioService usuarioService)
+        public UsuarioController(IUsuarioService usuarioService, IJwtService jwtService)
         {
             _usuarioService = usuarioService;
+            _jwtService = jwtService;
         }
 
         // GET: api/Usuario/GetTodosLosUsuarios
         [HttpGet("GetTodosLosUsuarios")]
+        [Authorize(Roles = "Administrador")] // Solo administradores pueden ver todos los usuarios
         public IActionResult GetTodosLosUsuarios()
         {
             try
@@ -32,6 +36,7 @@ namespace BackEnd.Controllers
 
         // GET: api/Usuario/GetUsuarioPorId/{id}
         [HttpGet("GetUsuarioPorId/{id}")]
+        [Authorize] // Cualquier usuario autenticado puede acceder
         public IActionResult GetUsuarioPorId(int id)
         {
             try
@@ -49,6 +54,7 @@ namespace BackEnd.Controllers
 
         // GET: api/Usuario/GetUsuariosByRolYCarrera
         [HttpGet("GetUsuariosByRolYCarrera")]
+        [Authorize(Roles = "Administrador,Profesor")] // Administradores y profesores
         public IActionResult GetUsuariosByRolYCarrera([FromQuery] string rol, [FromQuery] string carrera)
         {
             try
@@ -64,6 +70,7 @@ namespace BackEnd.Controllers
 
         // POST: api/Usuario/AddUsuario
         [HttpPost("AddUsuario")]
+        [AllowAnonymous] // Permitir registro sin autenticación
         public IActionResult AddUsuario([FromBody] CrearUsuarioDTO crearUsuarioDTO)
         {
             try
@@ -115,6 +122,7 @@ namespace BackEnd.Controllers
 
         // PUT: api/Usuario/UpdateUsuario
         [HttpPut("UpdateUsuario")]
+        [Authorize] // Usuario autenticado puede actualizar
         public IActionResult UpdateUsuario([FromBody] UsuarioDTO usuarioDTO)
         {
             try
@@ -138,16 +146,31 @@ namespace BackEnd.Controllers
 
         // POST: api/Usuario/Login
         [HttpPost("Login")]
-        public async Task<IActionResult> Login([FromBody] LoginDTO loginRequest)
+        [AllowAnonymous] // Permitir login sin autenticación previa
+        public async Task<IActionResult> Login([FromBody] LoginResponseDTO loginRequest)
         {
             try
             {
-                if (string.IsNullOrEmpty(loginRequest.Correo) || string.IsNullOrEmpty(loginRequest.Contrasena))
+                if (string.IsNullOrEmpty(loginRequest.Usuario.Correo) || string.IsNullOrEmpty(loginRequest.Usuario.Contrasena))
                     return BadRequest("El correo y la contraseña son requeridos");
 
-                var (estado, mensaje, usuario) = await _usuarioService.LoginUsuario(loginRequest.Correo, loginRequest.Contrasena);
+                var (estado, mensaje, usuario) = await _usuarioService.LoginUsuario(loginRequest.Usuario.Correo, loginRequest.Usuario.Contrasena);
 
-                return Ok(new { Estado = estado, Mensaje = mensaje, Usuario = usuario });
+                var response = new LoginResponseDTO
+                {
+                    Estado = estado,
+                    Mensaje = mensaje,
+                    Usuario = usuario
+                };
+
+                // Si el login es exitoso (estado == 1), generar token JWT
+                if (estado == 1 && usuario != null)
+                {
+                    response.Token = _jwtService.GenerateJwtToken(usuario);
+                    response.TokenExpiration = DateTime.UtcNow.AddMinutes(60); // Ajustar según configuración
+                }
+
+                return Ok(response);
             }
             catch (Exception ex)
             {
@@ -157,6 +180,7 @@ namespace BackEnd.Controllers
 
         // POST: api/Usuario/VerificarUsuario
         [HttpPost("VerificarUsuario")]
+        [AllowAnonymous] // Permitir verificación sin autenticación
         public async Task<IActionResult> VerificarUsuario([FromBody] VerificarUsuarioDTO verificacionRequest)
         {
             try
@@ -171,8 +195,9 @@ namespace BackEnd.Controllers
             }
         }
 
-        // POST: api/Usuario/CambiarContraseña
+        // POST: api/Usuario/CambiarContrasena
         [HttpPost("CambiarContrasena")]
+        [Authorize] // Usuario autenticado puede cambiar contraseña
         public async Task<IActionResult> CambiarContrasena([FromBody] CambiarContrasenaDTO cambioRequest)
         {
             try
@@ -183,6 +208,32 @@ namespace BackEnd.Controllers
                 var (estado, mensaje) = await _usuarioService.CambiarContrasena(cambioRequest.UsuarioId, cambioRequest.ContrasenaActual, cambioRequest.ContrasenaNueva);
 
                 return Ok(new { Estado = estado, Mensaje = mensaje });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+            }
+        }
+
+        // GET: api/Usuario/ValidateToken
+        [HttpGet("ValidateToken")]
+        [Authorize] // Endpoint para validar si el token es válido
+        public IActionResult ValidateToken()
+        {
+            try
+            {
+                // Si llega hasta aquí, significa que el token es válido
+                var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
+                if (userIdClaim != null)
+                {
+                    return Ok(new
+                    {
+                        Valid = true,
+                        UserId = userIdClaim.Value,
+                        Mensaje = "Token válido"
+                    });
+                }
+                return Unauthorized(new { Valid = false, Mensaje = "Token inválido" });
             }
             catch (Exception ex)
             {

@@ -8,6 +8,9 @@ using BackEnd.Servicios.Interfaces;
 using BackEnd.Servicios.Implementaciones;
 using BackEnd.Helpers.Implementaciones;
 using BackEnd.Helpers.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,6 +40,31 @@ builder.Services.AddCors(options =>
 });
 #endregion
 
+
+// Configuración de JWT Authentication
+var jwtSettings = builder.Configuration.GetSection("JwtSettings");
+var secretKey = jwtSettings["SecretKey"];
+var issuer = jwtSettings["Issuer"];
+var audience = jwtSettings["Audience"];
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = issuer,
+            ValidAudience = audience,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey!)),
+            ClockSkew = TimeSpan.Zero
+        };
+    });
+
+builder.Services.AddAuthorization();
+
 #region ServicesYDBContext
 builder.Services.AddDbContext<SistemaCursosContext>(
                                 options =>
@@ -56,6 +84,7 @@ builder.Services.AddScoped<ISeccioneDAL, DALSeccioneImpl>();
 builder.Services.AddScoped<ITipoEvaluacioneDAL, DALTipoEvaluacioneImpl>();
 builder.Services.AddScoped<IUsuarioDAL, DALUsuarioImpl>();
 builder.Services.AddScoped<IMailHelper, MailHelper>();
+builder.Services.AddScoped<IJwtService, JwtService>();
 
 // Registro de Unidad de Trabajo
 builder.Services.AddScoped<IUnidadDeTrabajo, UnidadDeTrabajo>();
@@ -82,6 +111,7 @@ if (app.Environment.IsDevelopment())
 // ? IMPORTANTE: UseCors debe ir ANTES de UseAuthorization
 app.UseCors("AllowReactApp");
 
+app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 #endregion
