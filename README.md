@@ -1,26 +1,33 @@
-# Sistema de Matrícula
+# Sistema de Matrícula - Backend
 
 Este proyecto es un sistema de matrícula para gestionar estudiantes, profesores, cursos, secciones, horarios, Evaluaciones, inscripciones y notas.  
-Está construido con **.NET** para el backend y **React** para el frontend.
+Está construido con **.NET**.
 
 ## Tecnologías
 
 - **Backend:** .NET 8, Entity Framework Core, SQL Server
-- **Frontend:** React 19, Vite
 - **Base de datos:** SQL Server Express
 
 ## Estructura del Proyecto
 
 ```
 /DAL
+  ├──Implementaciones
+  |  └──ImplementacionesDeEntidades
+  ├──Interfaces
+  |  └──InterfacesDeEntidades
+
 /BackEnd
   ├── Controllers
   ├── DTO
-  ├── Services
-  │   ├── Implementations
+  ├── Helpers
+  |   ├── Implementaciones
+  |   └── Interfaces
+  ├── Servicios
+  │   ├── Implementaciones
   │   └── Interfaces
 /Entities
-/FrontEnd
+  └──Entities
 
 ```
 
@@ -56,33 +63,10 @@ Está construido con **.NET** para el backend y **React** para el frontend.
 
 El backend quedará disponible en: ` ` o ` `.
 
-### Frontend (React)
-
-1.   
-2.   
-
-```bash
-
-```
-
-3.  
-
-```
- 
-```
-
-4. Corre el frontend:
-
-```bash
- 
-```
-
-La aplicación quedará disponible en: ` `.
 
 ## Requisitos Previos
 
 - [.NET 8 SDK](https://dotnet.microsoft.com/en-us/download)
-- [Node.js 18+](https://nodejs.org/)
 - [SQL Server Express](https://www.microsoft.com/en-us/sql-server/sql-server-downloads)
 
 ## Capturas de Pantalla
