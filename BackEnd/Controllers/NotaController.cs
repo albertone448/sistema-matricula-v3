@@ -1,5 +1,6 @@
 ﻿using BackEnd.DTO;
 using BackEnd.Servicios.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BackEnd.Controllers
@@ -17,6 +18,7 @@ namespace BackEnd.Controllers
 
         // GET: api/Nota/GetAllNotas
         [HttpGet("GetAllNotas")]
+        [Authorize]
         public IActionResult GetAllNotas()
         {
             try
@@ -32,6 +34,7 @@ namespace BackEnd.Controllers
 
         // PUT: api/Nota/UpdateNota
         [HttpPut("UpdateNota")]
+        [Authorize]
         public IActionResult UpdateNota([FromBody] NotaDTO notaDTO)
         {
             try
@@ -58,6 +61,7 @@ namespace BackEnd.Controllers
 
         // DELETE: api/Nota/DeleteNota
         [HttpDelete("DeleteNota")]
+        [Authorize]
         public IActionResult DeleteNota([FromBody] NotaDTO notaDTO)
         {
             try
@@ -81,6 +85,7 @@ namespace BackEnd.Controllers
 
         // GET: api/Nota/GetNotasPorInscripcion/{inscripcionId}
         [HttpGet("GetNotasPorInscripcion/{inscripcionId}")]
+        [Authorize]
         public IActionResult GetNotasPorInscripcion(int inscripcionId)
         {
             try
@@ -101,6 +106,7 @@ namespace BackEnd.Controllers
 
         // GET: api/Nota/GetNotasPorSeccion/{seccionId}
         [HttpGet("GetNotasPorSeccion/{seccionId}")]
+        [Authorize]
         public IActionResult GetNotasPorSeccion(int seccionId)
         {
             try

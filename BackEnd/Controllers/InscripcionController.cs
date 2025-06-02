@@ -1,5 +1,6 @@
 ﻿using BackEnd.DTO;
 using BackEnd.Servicios.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BackEnd.Controllers
@@ -18,6 +19,7 @@ namespace BackEnd.Controllers
 
         // POST: api/Inscripcion/AddInscripcion
         [HttpPost("AddInscripcion")]
+        [Authorize]
         public IActionResult AddInscripcion([FromBody] InscripcioneDTO inscripcionDTO)
         {
             try
@@ -37,6 +39,7 @@ namespace BackEnd.Controllers
 
         // DELETE: api/Inscripcion/DeleteInscripcion
         [HttpDelete("DeleteInscripcion")]
+        [Authorize]
         public IActionResult DeleteInscripcion([FromBody] InscripcioneDTO inscripcionDTO)
         {
             try
@@ -56,6 +59,7 @@ namespace BackEnd.Controllers
 
         // GET: api/Inscripcion/GetInscripcionesPorUsuario
         [HttpGet("GetInscripcionesPorUsuario")]
+        [Authorize]
         public IActionResult GetInscripcionesPorUsuario(int id)
         {
             try
@@ -71,6 +75,7 @@ namespace BackEnd.Controllers
 
         // GET: api/Inscripcion/ListarUsuariosPorSeccion
         [HttpGet("ListarUsuariosPorSeccion")]
+        [Authorize]
         public IActionResult ListarUsuariosPorSeccion(int id)
         {
             try

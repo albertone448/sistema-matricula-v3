@@ -1,5 +1,6 @@
 ﻿using BackEnd.DTO;
 using BackEnd.Servicios.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BackEnd.Controllers
@@ -17,6 +18,7 @@ namespace BackEnd.Controllers
 
         // GET: api/TipoEvaluacion/GetAllTiposEvaluacion
         [HttpGet("GetAllTiposEvaluacion")]
+        [Authorize]
         public IActionResult GetAllTiposEvaluacion()
         {
             try
@@ -32,6 +34,7 @@ namespace BackEnd.Controllers
 
         // GET: api/TipoEvaluacion/GetTipoEvaluacionById/{id}
         [HttpGet("GetTipoEvaluacionById/{id}")]
+        [Authorize]
         public IActionResult GetTipoEvaluacionById(int id)
         {
             try

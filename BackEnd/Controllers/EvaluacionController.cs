@@ -1,5 +1,6 @@
 ﻿using BackEnd.DTO;
 using BackEnd.Servicios.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BackEnd.Controllers
@@ -17,6 +18,7 @@ namespace BackEnd.Controllers
 
         // GET: api/Evaluacion/GetAllEvaluaciones
         [HttpGet("GetAllEvaluaciones")]
+        [Authorize]
         public IActionResult GetAllEvaluaciones()
         {
             try
@@ -32,6 +34,7 @@ namespace BackEnd.Controllers
 
         // GET: api/Evaluacion/GetEvaluacionById/{id}
         [HttpGet("GetEvaluacionById/{id}")]
+        [Authorize]
         public IActionResult GetEvaluacionById(int id)
         {
             try
@@ -49,6 +52,7 @@ namespace BackEnd.Controllers
 
         // POST: api/Evaluacion/AddEvaluacion
         [HttpPost("AddEvaluacion")]
+        [Authorize]
         public IActionResult AddEvaluacion([FromBody] EvaluacioneDTO evaluacionDTO)
         {
             try
@@ -73,6 +77,7 @@ namespace BackEnd.Controllers
 
         // PUT: api/Evaluacion/UpdateEvaluacion
         [HttpPut("UpdateEvaluacion")]
+        [Authorize]
         public IActionResult UpdateEvaluacion([FromBody] EvaluacioneDTO evaluacionDTO)
         {
             try
@@ -97,6 +102,7 @@ namespace BackEnd.Controllers
 
         // DELETE: api/Evaluacion/DeleteEvaluacion
         [HttpDelete("DeleteEvaluacion")]
+        [Authorize]
         public IActionResult DeleteEvaluacion([FromBody] EvaluacioneDTO evaluacionDTO)
         {
             try
@@ -117,6 +123,7 @@ namespace BackEnd.Controllers
 
         // GET: api/Evaluacion/ObtenerEvaluacionesPorSeccion/{seccionId}
         [HttpGet("ObtenerEvaluacionesPorSeccion/{seccionId}")]
+        [Authorize]
         public IActionResult ObtenerEvaluacionesPorSeccion(int seccionId)
         {
             try
@@ -132,6 +139,7 @@ namespace BackEnd.Controllers
 
         // GET: api/Evaluacion/ValidarPorcentajes/{seccionId}
         [HttpGet("ValidarPorcentajes/{seccionId}")]
+        [Authorize]
         public IActionResult ValidarPorcentajes(int seccionId)
         {
             try

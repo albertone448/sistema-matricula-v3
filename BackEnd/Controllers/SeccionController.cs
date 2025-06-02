@@ -1,5 +1,6 @@
 ﻿using BackEnd.DTO;
 using BackEnd.Servicios.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BackEnd.Controllers
@@ -18,6 +19,7 @@ namespace BackEnd.Controllers
 
         // GET: api/Seccion/GetAllSecciones
         [HttpGet("GetAllSecciones")]
+        [Authorize]
         public IActionResult GetAllSecciones()
         {
             try
@@ -33,6 +35,7 @@ namespace BackEnd.Controllers
 
         // GET: api/Seccion/GetSeccionById/{id}
         [HttpGet("GetSeccionById/{id}")]
+        [Authorize]
         public IActionResult GetSeccionById(int id)
         {
             try
@@ -50,6 +53,7 @@ namespace BackEnd.Controllers
 
         // POST: api/Seccion/AddSeccion
         [HttpPost("AddSeccion")]
+        [Authorize]
         public IActionResult AddSeccion([FromBody] SeccioneDTO seccionDTO)
         {
             try
@@ -69,6 +73,7 @@ namespace BackEnd.Controllers
 
         // PUT: api/Seccion/UpdateSeccion
         [HttpPut("UpdateSeccion")]
+        [Authorize]
         public IActionResult UpdateSeccion([FromBody] SeccioneDTO seccionDTO)
         {
             try
@@ -88,6 +93,7 @@ namespace BackEnd.Controllers
 
         // DELETE: api/Seccion/DeleteSeccion
         [HttpDelete("DeleteSeccion")]
+        [Authorize]
         public IActionResult DeleteSeccion([FromBody] SeccioneDTO seccionDTO)
         {
             try
@@ -107,6 +113,7 @@ namespace BackEnd.Controllers
 
         // GET: api/Seccion/GetSeccionesbyCarrera/{carrera}
         [HttpGet("GetSeccionesbyCarrera/{carrera}")]
+        [Authorize]
         public IActionResult GetSeccionesbyCarrera(string carrera)
         {
             try
