@@ -1,5 +1,6 @@
 ﻿using BackEnd.DTO;
 using BackEnd.Servicios.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BackEnd.Controllers
@@ -18,6 +19,7 @@ namespace BackEnd.Controllers
 
         // GET: api/Curso/GetAllCursos
         [HttpGet("GetAllCursos")]
+        [Authorize]
         public IActionResult GetAllCursos()
         {
             try
@@ -33,6 +35,7 @@ namespace BackEnd.Controllers
 
         // GET: api/Curso/GetCursoById/{id}
         [HttpGet("GetCursoById/{id}")]
+        [Authorize]
         public IActionResult GetCursoById(int id)
         {
             try
@@ -50,6 +53,7 @@ namespace BackEnd.Controllers
 
         // POST: api/Curso/AddCurso
         [HttpPost("AddCurso")]
+        [Authorize]
         public IActionResult AddCurso([FromBody] CursoDTO cursoDTO)
         {
             try
@@ -70,6 +74,7 @@ namespace BackEnd.Controllers
 
         // PUT: api/Curso/UpdateCurso
         [HttpPut("UpdateCurso")]
+        [Authorize]
         public IActionResult UpdateCurso([FromBody] CursoDTO cursoDTO)
         {
             try
@@ -90,6 +95,7 @@ namespace BackEnd.Controllers
 
         // DELETE: api/Curso/DeleteCurso/{id}
         [HttpDelete("DeleteCurso/{id}")]
+        [Authorize]
         public IActionResult DeleteCurso(int id)
         {
             try

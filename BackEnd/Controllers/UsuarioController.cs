@@ -21,7 +21,7 @@ namespace BackEnd.Controllers
 
         // GET: api/Usuario/GetTodosLosUsuarios
         [HttpGet("GetTodosLosUsuarios")]
-        [Authorize(Roles = "Administrador")] // Solo administradores pueden ver todos los usuarios
+        [Authorize] 
         public IActionResult GetTodosLosUsuarios()
         {
             try
@@ -37,7 +37,7 @@ namespace BackEnd.Controllers
 
         // GET: api/Usuario/GetUsuarioPorId/{id}
         [HttpGet("GetUsuarioPorId/{id}")]
-        [Authorize] // Cualquier usuario autenticado puede acceder
+        [Authorize]
         public IActionResult GetUsuarioPorId(int id)
         {
             try
@@ -55,7 +55,7 @@ namespace BackEnd.Controllers
 
         // GET: api/Usuario/GetUsuariosByRolYCarrera
         [HttpGet("GetUsuariosByRolYCarrera")]
-        [Authorize(Roles = "Administrador,Profesor")] // Administradores y profesores
+        [Authorize]
         public IActionResult GetUsuariosByRolYCarrera([FromQuery] string rol, [FromQuery] string carrera)
         {
             try
@@ -123,7 +123,7 @@ namespace BackEnd.Controllers
 
         // PUT: api/Usuario/UpdateUsuario
         [HttpPut("UpdateUsuario")]
-        [Authorize] // Usuario autenticado puede actualizar
+        [Authorize]
         public IActionResult UpdateUsuario([FromBody] UsuarioDTO usuarioDTO)
         {
             try
@@ -148,15 +148,22 @@ namespace BackEnd.Controllers
         // POST: api/Usuario/Login
         [HttpPost("Login")]
         [AllowAnonymous] // Permitir login sin autenticación previa
-        public async Task<IActionResult> Login([FromBody] LoginResponseDTO loginRequest)
+        public async Task<IActionResult> Login([FromBody] LoginRequestDTO loginRequest)
         {
             try
             {
-                if (string.IsNullOrEmpty(loginRequest.Usuario.Correo) || string.IsNullOrEmpty(loginRequest.Usuario.Contrasena))
+                // Validar que el objeto no sea nulo
+                if (loginRequest == null)
+                    return BadRequest("Los datos de login son requeridos");
+
+                // Validar campos requeridos
+                if (string.IsNullOrEmpty(loginRequest.Correo) || string.IsNullOrEmpty(loginRequest.Contrasena))
                     return BadRequest("El correo y la contraseña son requeridos");
 
-                var (estado, mensaje, usuario) = await _usuarioService.LoginUsuario(loginRequest.Usuario.Correo, loginRequest.Usuario.Contrasena);
+                // Llamar al servicio de usuario
+                var (estado, mensaje, usuario) = await _usuarioService.LoginUsuario(loginRequest.Correo, loginRequest.Contrasena);
 
+                // Crear respuesta
                 var response = new LoginResponseDTO
                 {
                     Estado = estado,
@@ -198,7 +205,7 @@ namespace BackEnd.Controllers
 
         // POST: api/Usuario/CambiarContrasena
         [HttpPost("CambiarContrasena")]
-        [Authorize] // Usuario autenticado puede cambiar contraseña
+        [Authorize]
         public async Task<IActionResult> CambiarContrasena([FromBody] CambiarContrasenaDTO cambioRequest)
         {
             try
@@ -218,7 +225,7 @@ namespace BackEnd.Controllers
 
         // GET: api/Usuario/ValidateToken
         [HttpGet("ValidateToken")]
-        [Authorize] // Endpoint para validar si el token es válido
+        [Authorize]
         public IActionResult ValidateToken()
         {
             try

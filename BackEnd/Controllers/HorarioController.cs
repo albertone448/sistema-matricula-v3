@@ -1,4 +1,5 @@
 ﻿using BackEnd.Servicios.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BackEnd.Controllers
@@ -17,6 +18,7 @@ namespace BackEnd.Controllers
 
         // GET: api/Horario/GetAllHorarios
         [HttpGet("GetAllHorarios")]
+        [Authorize]
         public IActionResult GetAllHorarios()
         {
             try
