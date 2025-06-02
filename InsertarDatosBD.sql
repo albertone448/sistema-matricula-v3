@@ -78,15 +78,15 @@ VALUES
 
 -- 3. CURSOS
 PRINT 'Insertando cursos...'
-INSERT INTO Cursos (Nombre, Descripcion, Creditos)
+INSERT INTO Cursos (Nombre, Descripcion, Creditos, Codigo)
 VALUES 
-('Programación I', 'Introducción a la programación con C#', 4),
-('Base de Datos I', 'Fundamentos de bases de datos relacionales', 3),
-('Matemáticas Discretas', 'Lógica y matemáticas para informática', 4),
-('Administración de Empresas', 'Principios básicos de administración', 3),
-('Estructuras de Datos', 'Algoritmos y estructuras de datos', 4),
-('Cálculo I', 'Matemáticas aplicadas a la ingeniería', 4),
-('Contabilidad General', 'Fundamentos de contabilidad', 3);
+('Programación I', 'Introducción a la programación con C#', 4, 'INF101'),
+('Base de Datos I', 'Fundamentos de bases de datos relacionales', 3, 'INF102'),
+('Matemáticas Discretas', 'Lógica y matemáticas para informática', 4, 'MAT201'),
+('Administración de Empresas', 'Principios básicos de administración', 3, 'ADM301'),
+('Estructuras de Datos', 'Algoritmos y estructuras de datos', 4, 'INF103'),
+('Cálculo I', 'Matemáticas aplicadas a la ingeniería', 4, 'MAT202'),
+('Contabilidad General', 'Fundamentos de contabilidad', 3, 'ADM302');
 
 -- 4. TIPOS DE EVALUACIONES
 PRINT 'Insertando tipos de evaluaciones...'
