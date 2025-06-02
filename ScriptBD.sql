@@ -676,7 +676,7 @@ CREATE OR ALTER PROCEDURE sp_ListarUsuariosPorSeccion
     @SeccionId INT
 AS
 BEGIN
-    SELECT i.InscripcionId, i.SeccionId, i.UsuarioId, u.Nombre, u.Apellido1, u.Apellido2, u.Correo
+    SELECT i.InscripcionId, i.SeccionId, i.UsuarioId, i.Created_at, i.Updated_at, u.Nombre, u.Apellido1, u.Apellido2, u.Correo
     FROM Inscripciones i
     INNER JOIN Usuarios u ON i.UsuarioId = u.UsuarioId
     WHERE i.SeccionId = @SeccionId;
