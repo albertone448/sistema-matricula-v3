@@ -16,7 +16,6 @@ Está construido con **.NET**.
   |  └──ImplementacionesDeEntidades
   ├──Interfaces
   |  └──InterfacesDeEntidades
-
 /BackEnd
   ├── Controllers
   ├── DTO
@@ -28,7 +27,6 @@ Está construido con **.NET**.
   │   └── Interfaces
 /Entities
   └──Entities
-
 ```
 
 ## Funcionalidades
