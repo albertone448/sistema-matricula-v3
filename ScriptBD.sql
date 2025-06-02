@@ -24,6 +24,7 @@ CREATE TABLE Usuarios (
 
 CREATE TABLE Cursos (
     CursoId INt IDENTITY (1,1) PRIMARY KEY,
+    Codigo NVARCHAR(10) UNIQUE NOT NULL,
     Nombre NVARCHAR(100) NOT NULL,
     Descripcion NVARCHAR(255) NOT NULL,
     Creditos INT NOT NULL,
@@ -453,14 +454,15 @@ END;
 GO
 
 -- SP para crear un nuevo curso
-CREATE OR ALTER PROCEDURE sp_CreateCurso
+CREATE OR ALTER   PROCEDURE [dbo].[sp_CreateCurso]
     @Nombre NVARCHAR(100),
+    @Codigo NVARCHAR(10),
     @Descripcion NVARCHAR(255),
     @Creditos INT
 AS
 BEGIN
-    INSERT INTO Cursos (Nombre, Descripcion, Creditos)
-    VALUES (@Nombre, @Descripcion, @Creditos);
+    INSERT INTO Cursos (Nombre, Descripcion, Creditos,Codigo)
+    VALUES (@Nombre, @Descripcion, @Creditos, @Codigo);
     
     SELECT SCOPE_IDENTITY() AS CursoId;
 END;
@@ -497,9 +499,10 @@ END;
 GO
 
 -- SP para editar un curso
-CREATE OR ALTER PROCEDURE sp_UpdateCurso
+CREATE OR ALTER   PROCEDURE [dbo].[sp_UpdateCurso]
     @CursoId INT,
     @Nombre NVARCHAR(100),
+    @Codigo NVARCHAR(10),
     @Descripcion NVARCHAR(255) = NULL,
     @Creditos INT
 AS
@@ -508,6 +511,7 @@ BEGIN
     SET Nombre = @Nombre,
         Descripcion = @Descripcion,
         Creditos = @Creditos,
+        Codigo = @Codigo,
 		Updated_at = GETDATE()
     WHERE CursoId = @CursoId;
 END;
