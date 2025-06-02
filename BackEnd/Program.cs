@@ -85,6 +85,7 @@ builder.Services.AddScoped<ITipoEvaluacioneDAL, DALTipoEvaluacioneImpl>();
 builder.Services.AddScoped<IUsuarioDAL, DALUsuarioImpl>();
 builder.Services.AddScoped<IMailHelper, MailHelper>();
 builder.Services.AddScoped<IJwtService, JwtService>();
+builder.Services.AddScoped<IInscripcionService, InscripcionService>();
 
 // Registro de Unidad de Trabajo
 builder.Services.AddScoped<IUnidadDeTrabajo, UnidadDeTrabajo>();
@@ -96,6 +97,7 @@ builder.Services.AddScoped<IEvaluacionService, EvaluacionService>();
 builder.Services.AddScoped<IHorarioService, HorarioService>();
 builder.Services.AddScoped<ICursoService, CursoService>();
 builder.Services.AddScoped<INotaService, NotaService>();
+
 #endregion
 
 var app = builder.Build();
