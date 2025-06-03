@@ -20,7 +20,7 @@ namespace DAL.Implementaciones.ImplementacionesDeEntidades
 
         public List<Inscripcione> GetInscripcionesPorUsuario(int id)
         {
-            var query = "EXEC sp_ObtenerInscripcionesPorUsuario @UsuarioId";
+            var query = "EXEC sp_ListarInscripcionesPorUsuario @UsuarioId";
             var parameter = new SqlParameter("@UsuarioId", System.Data.SqlDbType.Int) { Value = id };
             var result = _context.Inscripciones.FromSqlRaw(query, parameter);
             return result.ToList();
