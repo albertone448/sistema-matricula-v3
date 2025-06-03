@@ -49,10 +49,12 @@ VALUES
 ('Sofia', 'Herrera', 'Ramírez', '101112131', 'Estudiante', 'Administración', 'sofia.herrera@estudiante.edu', 'estudiante123', 1),
 ('Andrés', 'Moreno', 'Quesada', '141516171', 'Estudiante', 'Ingeniería Informática', 'andres.moreno@estudiante.edu', 'estudiante123', 1),
 ('Carmen', 'López', 'Solano', '181920212', 'Estudiante', 'Ingeniería Informática', 'carmen.lopez@estudiante.edu', 'estudiante123', 1),
+('Alberto', 'Nunez', 'Trejos', '208340790', 'Administrador', 'N/A', 'albertone448@gmail.com', 'Beto1010', 1),
 ('Roberto', 'Castro', 'Vega', '232425262', 'Estudiante', 'Administración', 'roberto.castro@estudiante.edu', 'estudiante123', 1);
 
 -- 2. HORARIOS (Recrear los horarios básicos)
 PRINT 'Insertando horarios...'
+
 INSERT INTO Horarios (HoraInicio, HoraFin, Dia)
 VALUES 
 -- Lunes
@@ -74,7 +76,15 @@ VALUES
 -- Viernes
 ('08:00', '11:20', 'Viernes'),
 ('13:00', '16:20', 'Viernes'),
-('17:00', '20:20', 'Viernes');
+('17:00', '20:20', 'Viernes'),
+-- Sábado
+('08:00', '11:20', 'Sábado'),
+('13:00', '16:20', 'Sábado'),
+('17:00', '20:20', 'Sábado'),
+-- Domingo
+('08:00', '11:20', 'Domingo'),
+('13:00', '16:20', 'Domingo'),
+('17:00', '20:20', 'Domingo');
 
 -- 3. CURSOS
 PRINT 'Insertando cursos...'
