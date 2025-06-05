@@ -124,5 +124,35 @@ namespace BackEnd.Controllers
                 return StatusCode(500, $"Error interno del servidor: {ex.Message}");
             }
         }
+
+        // POST: api/Nota/CrearNota
+        [HttpPost("CrearNota")]
+        [Authorize]
+        public IActionResult CrearNota([FromBody] NotaDTO notaDTO)
+        {
+            try
+            {
+                if (notaDTO == null)
+                    return BadRequest("La nota no puede ser nula");
+
+                if (notaDTO.EvaluacionId <= 0)
+                    return BadRequest("El ID de evaluación debe ser válido");
+
+                if (notaDTO.InscripcionId <= 0)
+                    return BadRequest("El ID de inscripción debe ser válido");
+
+                if (notaDTO.Total < 0 || notaDTO.Total > 100)
+                    return BadRequest("La nota debe estar entre 0 y 100");
+
+                var result = _notaService.AddNota(notaDTO);
+                if (result)
+                    return Ok("Nota creada correctamente");
+                return BadRequest("Error al crear la nota");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+            }
+        }
     }
 }
